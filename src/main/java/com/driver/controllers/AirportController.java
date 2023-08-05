@@ -7,21 +7,18 @@ import com.driver.model.Flight;
 import com.driver.model.Passenger;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 public class AirportController {
+    public HashSet<Airport> Airport = new HashSet<>();
+    public HashSet<Flight> flights = new HashSet<>();
+    public HashSet<Passenger> passengers = new HashSet<>();
     @PostMapping("/add_airport")
     public String addAirport(@RequestBody Airport airport){
-
         //Simply add airport details to your database
         //Return a String message "SUCCESS"
-
+        Airport.add(airport);
         return "SUCCESS";
     }
 
@@ -30,8 +27,14 @@ public class AirportController {
 
         //Largest airport is in terms of terminals. 3 terminal airport is larger than 2 terminal airport
         //Incase of a tie return the Lexicographically smallest airportName
-
-       return null;
+        String largestTerminal = "";
+        int noTerminal = 0;
+        for(Airport air : Airport){
+            if(air.getNoOfTerminals() > noTerminal){
+                largestTerminal = air.getAirportName();
+            }
+        }
+       return largestTerminal;
     }
 
     @GetMapping("/get-shortest-time-travel-between-cities")
@@ -39,8 +42,13 @@ public class AirportController {
 
         //Find the duration by finding the shortest flight that connects these 2 cities directly
         //If there is no direct flight between 2 cities return -1.
-
-       return 0;
+        double time = -1;
+        for(Flight temp : flights){
+            if(temp.getFromCity().equals(fromCity) && temp.getToCity().equals(toCity)){
+                time = temp.getDuration();
+            }
+        }
+       return time;
     }
 
     @GetMapping("/get-number-of-people-on-airport-on/{date}")
@@ -48,8 +56,8 @@ public class AirportController {
 
         //Calculate the total number of people who have flights on that day on a particular airport
         //This includes both the people who have come for a flight and who have landed on an airport after their flight
-
-        return 0;
+        int total = 0;
+        return total;
     }
 
     @GetMapping("/calculate-fare")
@@ -97,9 +105,9 @@ public class AirportController {
 
     @PostMapping("/add-flight")
     public String addFlight(@RequestBody Flight flight){
-
         //Return a "SUCCESS" message string after adding a flight.
-       return null;
+        flights.add(flight);
+        return "SUCCESS";
     }
 
 
@@ -130,8 +138,8 @@ public class AirportController {
 
         //Add a passenger to the database
         //And return a "SUCCESS" message if the passenger has been added successfully.
-
-       return null;
+        passengers.add(passenger);
+       return "SUCCESS";
     }
 
 
